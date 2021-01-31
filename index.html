@@ -1,67 +1,348 @@
 <!DOCTYPE html>
 
 <html>
-  <head>
-    <title>Color Game</title>
-    <link rel="stylesheet" href="./index.css" />
-  </head>
-  <body onload="newGame()">
-    <div id="header">
-      <h2>The Great</h2>
-      <h1 id="header-clue">rgb(xxx,xxx,xxx)</h1>
-      <h2>Guessing Game</h2>
-    </div>
-    <div id="container">
-      <div class="tile" id="1"></div>
-      <div class="tile" id="2"></div>
-    </div>
+	<head>
+		<title>Color Game</title>
+		<link rel="stylesheet" href="./index.css" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body onload="newGame();">
+		<div id="header">
+			<div class="column">
+				<button id="button" onclick="tries()">TRIES</button>
+			</div>
 
-    <script>
-      var t1 = document.getElementById("1");
-      var t2 = document.getElementById("2");
-      var x;
-      var correctColor;
+			<div class="column">
+				<h2 class="text">COLOR GUESSING GAME</h2>
+				<h1 id="header-clue" class="text" align="center">(xxx,xxx,xxx)</h1>
+			</div>
 
-      function getRandomColor() {
-        var letters = "0123456789ABCDEF";
-        var color = "#";
-        for (var i = 0; i < 6; i++) {
-          color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-      }
+			<div class="column">
+				<button class="btn" onclick="Refresh()">NEW GAME</button>
+			</div>
+		</div>
+		<div id="container">
+			<div class="tile" id="1"></div>
+			<div class="tile" id="2"></div>
+			<div class="tile" id="3"></div>
+			<div class="tile" id="4"></div>
+			<div class="tile" id="5"></div>
+			<div class="tile" id="6"></div>
+			<div class="tile" id="7"></div>
+			<div class="tile" id="8"></div>
+			<div class="tile" id="9"></div>
+			<div class="image" id="img"></div>
+		</div>
 
-      function newGame() {
-        t1.style.background = getRandomColor();
-        t2.style.background = getRandomColor();
+		<script>
+			var t1 = document.getElementById('1');
+			var t2 = document.getElementById('2');
+			var t3 = document.getElementById('3');
+			var t4 = document.getElementById('4');
+			var t5 = document.getElementById('5');
+			var t6 = document.getElementById('6');
+			var t7 = document.getElementById('7');
+			var t8 = document.getElementById('8');
+			var t9 = document.getElementById('9');
+			var x;
+			var t = 8;
+			var res = 0;
+			var correctColor;
+			var l = [t1, t2, t3, t4, t5, t6, t7, t8, t9];
+			function getRandomColor() {
+				var letters = '0123456789ABCDEF';
+				var color = '#';
+				for (var i = 0; i < 6; i++) {
+					color += letters[Math.floor(Math.random() * 16)];
+				}
+				return color;
+			}
+			function tries() {
+				var m = prompt('Enter Number Of Tries(between 1 and 8)', '8');
+				t = m;
+				document.getElementById('button').innerHTML = 'TRIES LEFT: ' + t;
+			}
+			function Refresh() {
+				if (confirm('You Sure?')) {
+					location.reload();
+				}
+			}
+			function newGame() {
+				document.getElementById('img').style.display = 'none';
+				t1.style.background = getRandomColor();
+				t2.style.background = getRandomColor();
+				t3.style.background = getRandomColor();
+				t4.style.background = getRandomColor();
+				t5.style.background = getRandomColor();
+				t6.style.background = getRandomColor();
+				t7.style.background = getRandomColor();
+				t8.style.background = getRandomColor();
+				t9.style.background = getRandomColor();
 
-        x = Math.floor(Math.random() * 2 + 1);
+				x = Math.floor(Math.random() * 9 + 1);
 
-        if (x == 1) correctColor = t1.style.background;
-        else correctColor = t2.style.background;
-        /* console.log(x);
-        console.log(correctColor); */
+				correctColor = l[x - 1].style.background;
+				/* console.log(x);
+			     console.log(correctColor); */
 
-        document.getElementById("header-clue").innerHTML = correctColor;
-      }
+				document.getElementById('header-clue').innerHTML = correctColor;
+			}
 
-      t1.addEventListener("click", function () {
-        if (t1.style.background == correctColor) {
-          t2.style.background = correctColor;
-          document.getElementById("header").style.background = correctColor;
-        } else {
-          t1.style.background = "black";
-        }
-      });
+			t1.addEventListener('click', function () {
+				if (res !== 1 && l[0] !== 0) {
+					t--;
+					document.getElementById('button').innerHTML = 'TRIES LEFT: ' + t;
+				}
+				if (t1.style.background == correctColor) {
+					document.getElementById('img').style.backgroundImage =
+						"url('win.gif')";
+					document.getElementById('img').style.display = 'block';
+					res = 1;
+					setTimeout(function () {
+						alert('You Win, Congrats!');
+					}, 100);
+				} else {
+					if (t == 0) {
+						document.getElementById('img').style.backgroundImage =
+							"url('loss.gif')";
+						document.getElementById('img').style.display = 'block';
+						setTimeout(function () {
+							alert('You Lose, Try Again!');
+						}, 100);
+					}
+				}
+				t1.style.opacity = 0;
+				l[0] = 0;
+			});
 
-      t2.addEventListener("click", function () {
-        if (t2.style.background == correctColor) {
-          t1.style.background = correctColor;
-          document.getElementById("header").style.background = correctColor;
-        } else {
-          t2.style.background = "black";
-        }
-      });
-    </script>
-  </body>
+			t2.addEventListener('click', function () {
+				if (res !== 1 && l[1] !== 0) {
+					t--;
+				}
+				if (t2.style.background == correctColor) {
+					document.getElementById('img').style.backgroundImage =
+						"url('win.gif')";
+					document.getElementById('img').style.display = 'block';
+					res = 1;
+					setTimeout(function () {
+						alert('You Win, Congrats!');
+					}, 100);
+				} else {
+					if (t == 0) {
+						document.getElementById('img').style.backgroundImage =
+							"url('loss.gif')";
+						document.getElementById('img').style.display = 'block';
+						setTimeout(function () {
+							alert('You Lose, Try Again!');
+						}, 100);
+					}
+					t2.style.opacity = 0;
+					l[1] = 0;
+				}
+				document.getElementById('button').innerHTML = 'TRIES LEFT: ' + t;
+			});
+
+			t3.addEventListener('click', function () {
+				if (res !== 1 && l[2] !== 0) {
+					t--;
+					document.getElementById('button').innerHTML = 'TRIES LEFT: ' + t;
+				}
+				if (t3.style.background == correctColor) {
+					document.getElementById('img').style.backgroundImage =
+						"url('win.gif')";
+					document.getElementById('img').style.display = 'block';
+					res = 1;
+					setTimeout(function () {
+						alert('You Win, Congrats!');
+					}, 100);
+				} else {
+					if (t == 0) {
+						document.getElementById('img').style.backgroundImage =
+							"url('loss.gif')";
+						document.getElementById('img').style.display = 'block';
+						setTimeout(function () {
+							alert('You Lose, Try Again!');
+						}, 100);
+					}
+					t3.style.opacity = 0;
+					l[2] = 0;
+				}
+			});
+
+			t4.addEventListener('click', function () {
+				if (res !== 1 && l[3] !== 0) {
+					t--;
+					document.getElementById('button').innerHTML = 'TRIES LEFT: ' + t;
+				}
+				if (t4.style.background == correctColor) {
+					document.getElementById('img').style.backgroundImage =
+						"url('win.gif')";
+					document.getElementById('img').style.display = 'block';
+					res = 1;
+					setTimeout(function () {
+						alert('You Win, Congrats!');
+					}, 100);
+				} else {
+					if (t == 0) {
+						document.getElementById('img').style.backgroundImage =
+							"url('loss.gif')";
+						document.getElementById('img').style.display = 'block';
+						setTimeout(function () {
+							alert('You Lose, Try Again!');
+						}, 100);
+					}
+					t4.style.opacity = 0;
+					l[3] = 0;
+				}
+			});
+
+			t5.addEventListener('click', function () {
+				if (res !== 1 && l[4] !== 0) {
+					t--;
+					document.getElementById('button').innerHTML = 'TRIES LEFT: ' + t;
+				}
+				if (t5.style.background == correctColor) {
+					document.getElementById('img').style.backgroundImage =
+						"url('win.gif')";
+					document.getElementById('img').style.display = 'block';
+					res = 1;
+					setTimeout(function () {
+						alert('You Win, Congrats!');
+					}, 100);
+				} else {
+					if (t == 0) {
+						document.getElementById('img').style.backgroundImage =
+							"url('loss.gif')";
+						document.getElementById('img').style.display = 'block';
+						setTimeout(function () {
+							alert('You Lose, Try Again!');
+						}, 100);
+					}
+					t5.style.opacity = 0;
+					l[4] = 0;
+				}
+			});
+
+			t6.addEventListener('click', function () {
+				if (res !== 1 && l[5] !== 0) {
+					t--;
+					document.getElementById('button').innerHTML = 'TRIES LEFT: ' + t;
+				}
+				if (t6.style.background == correctColor) {
+					document.getElementById('img').style.backgroundImage =
+						"url('win.gif')";
+					document.getElementById('img').style.display = 'block';
+					res = 1;
+					setTimeout(function () {
+						alert('You Win, Congrats!');
+					}, 100);
+				} else {
+					if (t == 0) {
+						document.getElementById('img').style.backgroundImage =
+							"url('loss.gif')";
+						document.getElementById('img').style.display = 'block';
+						setTimeout(function () {
+							alert('You Lose, Try Again!');
+						}, 100);
+					}
+					t6.style.opacity = 0;
+					l[5] = 0;
+				}
+			});
+
+			t7.addEventListener('click', function () {
+				if (res !== 1 && l[6] !== 0) {
+					t--;
+					document.getElementById('button').innerHTML = 'TRIES LEFT: ' + t;
+				}
+				if (t7.style.background == correctColor) {
+					document.getElementById('img').style.backgroundImage =
+						"url('win.gif')";
+					document.getElementById('img').style.display = 'block';
+					res = 1;
+					setTimeout(function () {
+						alert('You Win, Congrats!');
+					}, 100);
+				} else {
+					if (t == 0) {
+						document.getElementById('img').style.backgroundImage =
+							"url('loss.gif')";
+						document.getElementById('img').style.display = 'block';
+						setTimeout(function () {
+							alert('You Lose, Try Again!');
+						}, 100);
+					}
+					t7.style.opacity = 0;
+					l[6] = 0;
+				}
+			});
+
+			t8.addEventListener('click', function () {
+				if (res !== 1 && l[7] !== 0) {
+					t--;
+					document.getElementById('button').innerHTML = 'TRIES LEFT: ' + t;
+				}
+				if (t8.style.background == correctColor) {
+					document.getElementById('img').style.backgroundImage =
+						"url('win.gif')";
+					document.getElementById('img').style.display = 'block';
+					res = 1;
+					setTimeout(function () {
+						alert('You Win, Congrats!');
+					}, 100);
+				} else {
+					if (t == 0) {
+						document.getElementById('img').style.backgroundImage =
+							"url('loss.gif')";
+						document.getElementById('img').style.display = 'block';
+						setTimeout(function () {
+							alert('You Lose, Try Again!');
+						}, 100);
+					}
+					t8.style.opacity = 0;
+					l[7] = 0;
+				}
+			});
+
+			t9.addEventListener('click', function () {
+				if (res !== 1 && l[8] !== 0) {
+					t--;
+					document.getElementById('button').innerHTML = 'TRIES LEFT: ' + t;
+				}
+				if (t9.style.background == correctColor) {
+					document.getElementById('img').style.backgroundImage =
+						"url('win.gif')";
+					document.getElementById('img').style.display = 'block';
+					res = 1;
+					setTimeout(function () {
+						alert('You Win, Congrats!');
+					}, 100);
+				} else {
+					if (t == 0) {
+						document.getElementById('img').style.backgroundImage =
+							"url('loss.gif')";
+						document.getElementById('img').style.display = 'block';
+						setTimeout(function () {
+							alert('You Lose, Try Again!');
+						}, 100);
+					}
+					t9.style.opacity = 0;
+					l[8] = 0;
+				}
+			});
+
+			setTimeout(function () {
+				alert(
+					'Instructions: \n 1. Enjoy The Game \n 2. Click New Game To Start A New Game \n 3. Click Tries To Set The Number Of Tries'
+				);
+			}, 100);
+		</script>
+	</body>
 </html>
